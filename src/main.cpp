@@ -27,7 +27,7 @@ int main() {
             }
         }
         else if(IsKeyPressed(KEY_R)) {
-            simulation = Simulation(WINDOW_WIDTH, WINDOW_HEIGHT, CELL_SIZE); // Reset the simulation
+            simulation.CreateRandomState(); // Reset the simulation
             SetWindowTitle("Game of Life - Reset");
         }
         else if(IsKeyPressed(KEY_W)) {
@@ -41,6 +41,23 @@ int main() {
                 SetTargetFPS(FPS);
                 SetWindowTitle(("Game of Life - Running at " + std::to_string(FPS) + " FPS").c_str());
             }
+        }
+        else if(IsKeyPressed(KEY_C)) {
+            // Clear the grid
+            simulation.ClearGrid();
+            SetWindowTitle("Game of Life - Cleared");
+        }
+        else if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            Vector2 mousePos = GetMousePosition();
+            int row = mousePos.y / CELL_SIZE;
+            int col = mousePos.x / CELL_SIZE;
+            simulation.SetCellValue(row, col, 1); // Set cell to alive
+        }
+        else if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+            Vector2 mousePos = GetMousePosition();
+            int row = mousePos.y / CELL_SIZE;
+            int col = mousePos.x / CELL_SIZE;
+            simulation.SetCellValue(row, col, 0); // Set cell to dead
         }
 
         // Updating state
