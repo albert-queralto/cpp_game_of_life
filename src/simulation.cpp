@@ -34,3 +34,44 @@ int Simulation::CountLiveNeighbors(int row, int col)
     }
     return liveNeighbors;
 }
+
+void Simulation::Update()
+{
+    if(IsRunning())
+    {
+        for(int row = 0; row < grid.GetRows(); row++)
+        {
+            for(int col = 0; col < grid.GetCols(); col++)
+            {
+                int liveNeighbors = CountLiveNeighbors(row, col);
+                int currentValue = grid.GetValue(row, col);
+
+                if(currentValue == 1) // Cell is currently alive
+                {
+                    if(liveNeighbors < 2 || liveNeighbors > 3)
+                    {
+                        tempGrid.SetValue(row, col, 0); // Cell dies
+                    }
+                    else
+                    {
+                        tempGrid.SetValue(row, col, 1); // Cell stays alive
+                    }
+                }
+                else // Cell is currently dead
+                {
+                    if(liveNeighbors == 3)
+                    {
+                        tempGrid.SetValue(row, col, 1); // Cell becomes alive
+                    }
+                    else
+                    {
+                        tempGrid.SetValue(row, col, 0); // Cell stays dead
+                    }
+                }
+            }
+        }
+
+        // Swap grids
+        std::swap(grid, tempGrid);
+    }
+}
