@@ -75,3 +75,19 @@ void Simulation::Update()
         std::swap(grid, tempGrid);
     }
 }
+
+void Simulation::ClearGrid()
+{
+    if(!IsRunning())
+    {
+        grid.Clear();
+    }
+}
+
+void Simulation::CreateRandomState()
+{
+    if(!IsRunning())
+    {
+        grid.FillRandom();
+    }
+}

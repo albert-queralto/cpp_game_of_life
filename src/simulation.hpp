@@ -7,7 +7,7 @@ class Simulation {
             : grid(width, height, cellSize), 
             tempGrid(width, height, cellSize),
             run(false)
-            {grid.FillRandom();};
+            {};
         void Draw();
         void SetCellValue(int row, int col, int value);
         int CountLiveNeighbors(int row, int col);
@@ -15,6 +15,8 @@ class Simulation {
         bool IsRunning() { return run; }
         void Start() { run = true; }
         void Stop() { run = false; }
+        void ClearGrid();
+        void CreateRandomState();
 
     private:
         Grid grid;
