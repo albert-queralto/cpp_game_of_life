@@ -38,3 +38,14 @@ bool Grid::IsWithinBounds(int row, int col)
     }
     return false;
 }
+
+void Grid::FillRandom()
+{
+    for(int row = 0; row < rows; row++)
+    {
+        for(int col = 0; col < cols; col++)
+        {
+            cells[row][col] = (GetRandomValue(0, 4) == 4) ? 1 : 0;
+        }
+    }
+}
