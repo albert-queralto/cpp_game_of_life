@@ -1,6 +1,14 @@
 #pragma once
 #include <vector>
 
+
+enum CellState {
+    DEAD = 0,
+    ALIVE = 1,
+    NEWBORN = 2,
+    DYING = 3
+};
+
 class Grid
 {
     public:
@@ -8,11 +16,11 @@ class Grid
             : rows(height/cellSize),
             cols(width/cellSize), 
             cellSize(cellSize), 
-            cells(rows, std::vector<int>(cols, 0))
+            cells(rows, std::vector<CellState>(cols, DEAD))
             {};
         void Draw();
-        void SetValue(int row, int col, int value);
-        int GetValue(int row, int col);
+        void SetValue(int row, int col, CellState value);
+        CellState GetValue(int row, int col);
         bool IsWithinBounds(int row, int col);
         int GetRows() { return rows; }
         int GetCols() { return cols; }
@@ -23,5 +31,5 @@ class Grid
         int rows;
         int cols;
         int cellSize;
-        std::vector<std::vector<int>> cells; // 2D vector to represent the grid
+        std::vector<std::vector<CellState>> cells; // 2D vector to represent the grid
 };

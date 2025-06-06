@@ -7,13 +7,20 @@ void Grid::Draw()
     {
         for(int col = 0; col < cols; col++)
         {
-            Color color = cells[row][col] ? Color{0, 255, 0, 255} : Color{55, 55, 55, 255};
+            Color color;
+            switch (cells[row][col]) {
+                case DEAD:    color = Color{55, 55, 55, 255}; break;
+                case ALIVE:   color = Color{0, 255, 0, 255}; break;
+                case NEWBORN: color = Color{0, 200, 255, 255}; break; // Cyan for newborn
+                case DYING:   color = Color{255, 100, 0, 255}; break; // Orange for dying
+                default:      color = Color{55, 55, 55, 255}; break;
+            }
             DrawRectangle(col * cellSize, row * cellSize, cellSize - 1, cellSize - 1, color);
         }
     }
 }
 
-void Grid::SetValue(int row, int col, int value)
+void Grid::SetValue(int row, int col, CellState value)
 {
     if(IsWithinBounds(row, col))
     {
@@ -21,13 +28,13 @@ void Grid::SetValue(int row, int col, int value)
     }
 }
 
-int Grid::GetValue(int row, int col)
+CellState Grid::GetValue(int row, int col)
 {
     if(IsWithinBounds(row, col))
     {
         return cells[row][col];
     }
-    return 0;
+    return DEAD;
 }
 
 bool Grid::IsWithinBounds(int row, int col)
@@ -45,7 +52,11 @@ void Grid::FillRandom()
     {
         for(int col = 0; col < cols; col++)
         {
-            cells[row][col] = (GetRandomValue(0, 4) == 4) ? 1 : 0;
+            int r = GetRandomValue(0, 4);
+            if (r == 4)
+                cells[row][col] = NEWBORN;
+            else
+                cells[row][col] = DEAD;
         }
     }
 }
@@ -56,7 +67,7 @@ void Grid::Clear()
     {
         for(int col = 0; col < cols; col++)
         {
-            cells[row][col] = 0;
+            cells[row][col] = DEAD;
         }
     }
 }
