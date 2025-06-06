@@ -9,7 +9,7 @@ class Simulation {
             run(false)
             {};
         void Draw();
-        void SetCellValue(int row, int col, int value);
+        void SetCellValue(int row, int col, CellState value);
         int CountLiveNeighbors(int row, int col);
         void Update();
         bool IsRunning() { return run; }

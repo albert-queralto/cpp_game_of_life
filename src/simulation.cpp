@@ -7,7 +7,7 @@ void Simulation::Draw()
     grid.Draw();
 }
 
-void Simulation::SetCellValue(int row, int col, int value)
+void Simulation::SetCellValue(int row, int col, CellState value)
 {
     grid.SetValue(row, col, value);
 }
@@ -30,7 +30,9 @@ int Simulation::CountLiveNeighbors(int row, int col)
     {
         int neighborRow = (row + offset.first + grid.GetRows()) % grid.GetRows(); 
         int neighborCol = (col + offset.second + grid.GetCols()) % grid.GetCols();
-        liveNeighbors += grid.GetValue(neighborRow, neighborCol);
+        CellState neighborState = grid.GetValue(neighborRow, neighborCol);
+        if (neighborState == ALIVE || neighborState == DYING)
+            liveNeighbors++;
     }
     return liveNeighbors;
 }
@@ -44,29 +46,30 @@ void Simulation::Update()
             for(int col = 0; col < grid.GetCols(); col++)
             {
                 int liveNeighbors = CountLiveNeighbors(row, col);
-                int currentValue = grid.GetValue(row, col);
+                CellState currentValue = grid.GetValue(row, col);
 
-                if(currentValue == 1) // Cell is currently alive
-                {
-                    if(liveNeighbors < 2 || liveNeighbors > 3)
-                    {
-                        tempGrid.SetValue(row, col, 0); // Cell dies
-                    }
-                    else
-                    {
-                        tempGrid.SetValue(row, col, 1); // Cell stays alive
-                    }
-                }
-                else // Cell is currently dead
+                // State transitions
+                if(currentValue == DEAD)
                 {
                     if(liveNeighbors == 3)
-                    {
-                        tempGrid.SetValue(row, col, 1); // Cell becomes alive
-                    }
+                        tempGrid.SetValue(row, col, NEWBORN); // Dead cell with 3 neighbors becomes NEWBORN
                     else
-                    {
-                        tempGrid.SetValue(row, col, 0); // Cell stays dead
-                    }
+                        tempGrid.SetValue(row, col, DEAD);
+                }
+                else if(currentValue == NEWBORN)
+                {
+                    tempGrid.SetValue(row, col, ALIVE); // NEWBORN becomes ALIVE
+                }
+                else if(currentValue == ALIVE)
+                {
+                    if(liveNeighbors < 2 || liveNeighbors > 3)
+                        tempGrid.SetValue(row, col, DYING); // ALIVE with too few/many neighbors becomes DYING
+                    else
+                        tempGrid.SetValue(row, col, ALIVE); // Otherwise stays ALIVE
+                }
+                else if(currentValue == DYING)
+                {
+                    tempGrid.SetValue(row, col, DEAD); // DYING becomes DEAD
                 }
             }
         }
