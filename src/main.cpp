@@ -51,13 +51,13 @@ int main() {
             Vector2 mousePos = GetMousePosition();
             int row = mousePos.y / CELL_SIZE;
             int col = mousePos.x / CELL_SIZE;
-            simulation.SetCellValue(row, col, 1); // Set cell to alive
+            simulation.SetCellValue(row, col, ALIVE); // Set cell to alive
         }
         else if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
             Vector2 mousePos = GetMousePosition();
             int row = mousePos.y / CELL_SIZE;
             int col = mousePos.x / CELL_SIZE;
-            simulation.SetCellValue(row, col, 0); // Set cell to dead
+            simulation.SetCellValue(row, col, DEAD); // Set cell to dead
         }
 
         // Updating state
